@@ -1,0 +1,580 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Dashboard - Vinod Institute ERP</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="dashboard-layout">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <div class="logo-icon"
+                    style="width:35px; height:35px; background:var(--primary-orange); color:var(--white); border-radius:8px; display:flex; align-items:center; justify-content:center; font-weight:800;">
+                    VI</div>
+                <h3 style="font-size:1.1rem;">Admin Panel</h3>
+            </div>
+
+            <nav class="sidebar-nav">
+                <div class="nav-item active" data-target="overview">
+                    <i class="fa-solid fa-chart-pie"></i> Overview
+                </div>
+                <div class="nav-item" data-target="students">
+                    <i class="fa-solid fa-users"></i> Students
+                </div>
+                <div class="nav-item" data-target="attendance">
+                    <i class="fa-solid fa-calendar-check"></i> Attendance
+                </div>
+                <div class="nav-item" data-target="fees">
+                    <i class="fa-solid fa-wallet"></i> Fees
+                </div>
+                <div class="nav-item" data-target="progress">
+                    <i class="fa-solid fa-chart-line"></i> Progress
+                </div>
+                <div class="nav-item" data-target="enquiries">
+                    <i class="fa-solid fa-envelope-open-text"></i> Enquiries
+                </div>
+                <div class="nav-item" data-target="home-tuition-enq">
+                    <i class="fa-solid fa-house-user"></i> Home Tuition
+                </div>
+                <div class="nav-item" data-target="help">
+                    <i class="fa-solid fa-circle-question"></i> Help / Manual
+                </div>
+            </nav>
+
+            <div class="sidebar-footer">
+                <div class="user-profile">
+                    <div class="avatar">A</div>
+                    <div class="user-info">
+                        <h4>Admin User</h4>
+                        <p>Administrator</p>
+                    </div>
+                    <div class="btn-logout" title="Logout" onclick="window.location.href='index.html'">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </div>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <div class="top-header">
+                <h2 class="page-title">Dashboard Overview</h2>
+                <div class="date-display" id="currentDate">Mon, Oct 23, 2024</div>
+            </div>
+
+            <!-- Overview Section -->
+            <div id="overview" class="content-panel active">
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon orange"><i class="fa-solid fa-user-graduate"></i></div>
+                        <div class="stat-details">
+                            <p>Total Enrolled</p>
+                            <h3 id="statTotalStudents">0</h3>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon teal"><i class="fa-solid fa-money-bill-wave"></i></div>
+                        <div class="stat-details">
+                            <p>Fees Collected</p>
+                            <h3 id="statFeesCollected">₹0</h3>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon red"><i class="fa-solid fa-circle-exclamation"></i></div>
+                        <div class="stat-details">
+                            <p>Pending Fees</p>
+                            <h3 id="statPendingFees">₹0</h3>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon blue"><i class="fa-solid fa-clipboard-user"></i></div>
+                        <div class="stat-details">
+                            <p>Today's Attendance</p>
+                            <h3 id="statAttendance">0%</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Students Section (Add Student) -->
+            <div id="students" class="content-panel">
+                <div class="panel-header">
+                    <h3>Manage Students</h3>
+                    <div class="panel-actions">
+                        <div class="search-box">
+                            <i class="fa-solid fa-search"></i>
+                            <input type="text" id="searchStudent" placeholder="Search by name...">
+                        </div>
+                        <button class="btn-primary" onclick="openModal('addStudentModal')"><i
+                                class="fa-solid fa-plus"></i> Add Student</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="studentsTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Class</th>
+                                <th>Join Date</th>
+                                <th>Base Fee (₹)</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Data injected via JS -->
+                            <tr>
+                                <td colspan="5" style="text-align:center; color:var(--text-muted);">Loading students...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Enquiries Section -->
+            <div id="enquiries" class="content-panel">
+                <div class="panel-header">
+                    <h3>Website Enquiries</h3>
+                    <div class="panel-actions">
+                        <button class="btn-primary" onclick="loadEnquiries()"><i class="fa-solid fa-rotate-right"></i>
+                            Refresh</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="enquiriesTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Student Name</th>
+                                <th>Phone</th>
+                                <th>Course</th>
+                                <th>Message</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" style="text-align:center; color:var(--text-muted);">Loading enquiries...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Home Tuition Section -->
+            <div id="home-tuition-enq" class="content-panel">
+                <div class="panel-header">
+                    <h3>Home Tuition Requests</h3>
+                    <div class="panel-actions">
+                        <button class="btn-primary" onclick="loadHomeTuitionEnquiries()"><i class="fa-solid fa-rotate-right"></i>
+                            Refresh</button>
+                    </div>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="htEnquiriesTable">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Student Name</th>
+                                <th>Phone</th>
+                                <th>Class & Subjects</th>
+                                <th>Location</th>
+                                <th>Status</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="7" style="text-align:center; color:var(--text-muted);">Loading requests...
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Placeholders for other modules (to be expanded in subsequent steps) -->
+            <!-- Attendance Section -->
+            <div id="attendance" class="content-panel">
+                <div class="panel-header">
+                    <h3>Attendance Management</h3>
+                </div>
+
+                <div class="attendance-controls"
+                    style="display: flex; gap: 15px; margin-bottom: 20px; align-items: flex-end;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Date</label>
+                        <input type="date" id="attendanceDate" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; flex: 1; max-width: 250px;">
+                        <label>Select Class</label>
+                        <select id="attendanceClass">
+                            <option value="">-- Choose Class --</option>
+                            <option value="Class 1">Class 1</option>
+                            <option value="Class 2">Class 2</option>
+                            <option value="Class 3">Class 3</option>
+                            <option value="Class 4">Class 4</option>
+                            <option value="Class 5">Class 5</option>
+                            <option value="Class 6">Class 6</option>
+                            <option value="Class 7">Class 7</option>
+                            <option value="Class 8">Class 8</option>
+                            <option value="Class 9">Class 9</option>
+                            <option value="Class 10">Class 10</option>
+                            <option value="MPC">MPC</option>
+                            <option value="MEC">MEC</option>
+                            <option value="CEC">CEC</option>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="Degree">Degree</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" onclick="loadAttendanceStudents()" style="height: 50px;">Load
+                        Students</button>
+                </div>
+
+                <div class="table-responsive">
+                    <form id="attendanceForm">
+                        <table id="attendanceTable">
+                            <thead>
+                                <tr>
+                                    <th>Name</th>
+                                    <th>Class</th>
+                                    <th style="width: 150px; text-align: center;">Present</th>
+                                    <th style="width: 150px; text-align: center;">Absent</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td colspan="4" style="text-align:center; color:var(--text-muted);">Select a class
+                                        to load students.</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div style="margin-top: 20px; text-align: right;">
+                            <button type="submit" class="btn-primary" id="btnSaveAttendance" style="display: none;">Save
+                                Attendance</button>
+                        </div>
+                    </form>
+                </div>
+
+                <!-- Download Report Section -->
+                <hr style="margin: 40px 0 20px; border: none; border-top: 1px solid var(--border-color);">
+                <div class="panel-header" style="margin-bottom: 15px;">
+                    <h4 style="font-size: 1.1rem;">Download Monthly Report</h4>
+                </div>
+                <div style="display: flex; gap: 15px; align-items: flex-end;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Select Month</label>
+                        <input type="month" id="reportMonth" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; flex: 1; max-width: 250px;">
+                        <label>Select Class</label>
+                        <select id="reportClass">
+                            <option value="">-- Choose Class --</option>
+                            <option value="Class 1">Class 1</option>
+                            <option value="Class 2">Class 2</option>
+                            <option value="Class 3">Class 3</option>
+                            <option value="Class 4">Class 4</option>
+                            <option value="Class 5">Class 5</option>
+                            <option value="Class 6">Class 6</option>
+                            <option value="Class 7">Class 7</option>
+                            <option value="Class 8">Class 8</option>
+                            <option value="Class 9">Class 9</option>
+                            <option value="Class 10">Class 10</option>
+                            <option value="MPC">MPC</option>
+                            <option value="MEC">MEC</option>
+                            <option value="CEC">CEC</option>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="Degree">Degree</option>
+                        </select>
+                    </div>
+                    <button class="btn-primary" onclick="viewAttendanceReport()" style="height: 50px;"><i
+                            class="fa-solid fa-eye"></i> View Report</button>
+                    <button class="btn-outline" onclick="downloadAttendanceReport()" style="height: 50px;"><i
+                            class="fa-solid fa-download"></i> Download CSV</button>
+                </div>
+
+                <div id="reportViewContainer"
+                    style="margin-top: 25px; overflow-x: auto; display: none; background: #F8FAFC; border: 1px solid var(--border-color); border-radius: var(--radius-md); padding: 15px;">
+                    <!-- Report table injected via JS -->
+                </div>
+
+            </div>
+
+            <!-- Fee Management Section -->
+            <div id="fees" class="content-panel">
+                <div class="panel-header">
+                    <h3>Fee Tracking</h3>
+                </div>
+
+                <div style="display: flex; gap: 15px; margin-bottom: 20px; align-items: flex-end; flex-wrap: wrap;">
+                    <div class="form-group" style="margin-bottom: 0;">
+                        <label>Select Month</label>
+                        <input type="month" id="feeMonth" required>
+                    </div>
+                    <div class="form-group" style="margin-bottom: 0; min-width: 200px;">
+                        <label>Filter Class</label>
+                        <select id="feeClass">
+                            <option value="">All Classes</option>
+                            <option value="Class 1">Class 1</option>
+                            <option value="Class 2">Class 2</option>
+                            <option value="Class 3">Class 3</option>
+                            <option value="Class 4">Class 4</option>
+                            <option value="Class 5">Class 5</option>
+                            <option value="Class 6">Class 6</option>
+                            <option value="Class 7">Class 7</option>
+                            <option value="Class 8">Class 8</option>
+                            <option value="Class 9">Class 9</option>
+                            <option value="Class 10">Class 10</option>
+                            <option value="MPC">MPC</option>
+                            <option value="MEC">MEC</option>
+                            <option value="CEC">CEC</option>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="Degree">Degree</option>
+                        </select>
+                    </div>
+                    <div class="form-group search-box" style="margin-bottom: 0; flex: 1;">
+                        <i class="fa-solid fa-search" style="top: 35px;"></i>
+                        <input type="text" id="feeSearch" placeholder="Search student name..." style="width: 100%;">
+                    </div>
+                    <button class="btn-primary" onclick="loadFees()" style="height: 50px; min-width: 120px;">Load
+                        Fees</button>
+                    <button class="btn-outline" onclick="downloadFeeReport()" style="height: 50px;"><i
+                            class="fa-solid fa-download"></i> CSV</button>
+                </div>
+
+                <div class="table-responsive">
+                    <table id="feesTable">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Class</th>
+                                <th>Base Fee</th>
+                                <th>Status</th>
+                                <th>Amount Paid</th>
+                                <th>Action</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td colspan="6" style="text-align:center; color:var(--text-muted);">Select a month and
+                                    click Load Fees.</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div id="progress" class="content-panel">
+                <div class="panel-header">
+                    <h3>Progress Reports</h3>
+                </div>
+
+                <div style="display: flex; gap: 20px; align-items: flex-start; flex-wrap: wrap;">
+                    <!-- Left: Select Student & Add Marks -->
+                    <div
+                        style="flex: 1; min-width: 300px; background: #F8FAFC; padding: 20px; border-radius: 8px; border: 1px solid var(--border-color);">
+                        <h4 style="margin-bottom: 15px;">Add Test Marks</h4>
+                        <div class="form-group">
+                            <label>Select Student</label>
+                            <select id="progStudentSelect"
+                                style="width: 100%; padding: 10px; border-radius: 8px; border: 1px solid var(--border-color);"
+                                onchange="loadStudentProgress()">
+                                <option value="">-- Loading Students... --</option>
+                            </select>
+                        </div>
+                        <form id="progressForm">
+                            <div class="form-group">
+                                <label>Test Name / Subject</label>
+                                <input type="text" id="progTestName" required>
+                            </div>
+                            <div style="display:flex; gap:10px;">
+                                <div class="form-group" style="flex:1;">
+                                    <label>Max Marks</label>
+                                    <input type="number" id="progMaxMarks" required>
+                                </div>
+                                <div class="form-group" style="flex:1;">
+                                    <label>Obtained</label>
+                                    <input type="number" id="progMarksObtained" required>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label>Date</label>
+                                <input type="date" id="progDate" required>
+                            </div>
+                            <button type="submit" class="btn-primary" style="width: 100%;">Save Marks</button>
+                        </form>
+                    </div>
+
+                    <!-- Right: Student's Recent Tests -->
+                    <div style="flex: 2; min-width: 400px;">
+                        <h4 style="margin-bottom: 15px;" id="progStudentNameLabel">Student Performance</h4>
+                        <div class="table-responsive">
+                            <table id="progressTable">
+                                <thead>
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Test Name</th>
+                                        <th>Marks</th>
+                                        <th>%</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <td colspan="5" style="text-align:center; color:var(--text-muted);">Select a
+                                            student to view progress.</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Help Section -->
+            <div id="help" class="content-panel">
+                <div class="panel-header">
+                    <h3>Admin User Manual</h3>
+                </div>
+                <div class="help-content"
+                    style="background: var(--white); padding: 30px; border-radius: var(--radius-xl); border: 1px solid #EDEDED; box-shadow: var(--shadow-soft);">
+                    <p style="margin-bottom: 30px; color: var(--text-muted); font-size: 1.05rem;">Welcome to the Vinod
+                        Institute ERP Dashboard. Here is a quick guide on how to manage your daily operations.</p>
+
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-navy); font-size: 1.2rem; margin-bottom: 10px;"><i
+                                class="fa-solid fa-users" style="color: var(--primary-orange); margin-right: 10px;"></i>
+                            1. Managing Students</h4>
+                        <ul style="list-style-type: disc; margin-left: 30px; color: var(--text-muted);">
+                            <li style="margin-bottom: 5px;"><strong>Add a Student:</strong> Click the "Add Student"
+                                button, fill in their details (Name, Class, Join Date, Base Fee), and save. This
+                                registers them into the database.</li>
+                            <li style="margin-bottom: 5px;"><strong>Search:</strong> Use the search bar to quickly find
+                                a student by their name.</li>
+                            <li><strong>Delete:</strong> Click the trash icon next to a student to remove them from the
+                                system permanently.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-navy); font-size: 1.2rem; margin-bottom: 10px;"><i
+                                class="fa-solid fa-calendar-check"
+                                style="color: var(--accent-teal); margin-right: 10px;"></i> 2. Attendance Tracking</h4>
+                        <ul style="list-style-type: disc; margin-left: 30px; color: var(--text-muted);">
+                            <li style="margin-bottom: 5px;"><strong>Marking Attendance:</strong> Select the Date and
+                                Class, then click "Load Students". Mark students as Present or Absent and click "Save
+                                Attendance".</li>
+                            <li><strong>Monthly Reports:</strong> Select a Month and Class, then click "View Report" to
+                                see a monthly grid. You can also download this as a CSV file.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-navy); font-size: 1.2rem; margin-bottom: 10px;"><i
+                                class="fa-solid fa-wallet" style="color: #3B82F6; margin-right: 10px;"></i> 3. Fee
+                            Management</h4>
+                        <ul style="list-style-type: disc; margin-left: 30px; color: var(--text-muted);">
+                            <li style="margin-bottom: 5px;"><strong>Logging Payments:</strong> Select the fee month and
+                                filter by class. The system will load all students. You can mark fees as "Paid" or
+                                "Pending" and enter the exact amount collected.</li>
+                            <li><strong>CSV Export:</strong> Click the CSV button to download the fee collection data
+                                for your records.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 25px;">
+                        <h4 style="color: var(--text-navy); font-size: 1.2rem; margin-bottom: 10px;"><i
+                                class="fa-solid fa-chart-line" style="color: #8B5CF6; margin-right: 10px;"></i> 4.
+                            Progress Reports</h4>
+                        <ul style="list-style-type: disc; margin-left: 30px; color: var(--text-muted);">
+                            <li style="margin-bottom: 5px;"><strong>Adding Marks:</strong> Select a student from the
+                                dropdown on the left. Enter the test name, maximum marks, and obtained marks, then save.
+                            </li>
+                            <li><strong>Viewing Performance:</strong> Selecting a student will automatically load their
+                                test history on the right side, calculating their percentages.</li>
+                        </ul>
+                    </div>
+
+                    <div style="margin-bottom: 10px;">
+                        <h4 style="color: var(--text-navy); font-size: 1.2rem; margin-bottom: 10px;"><i
+                                class="fa-solid fa-envelope-open-text" style="color: #10AC84; margin-right: 10px;"></i>
+                            5. Website Enquiries</h4>
+                        <ul style="list-style-type: disc; margin-left: 30px; color: var(--text-muted);">
+                            <li style="margin-bottom: 5px;"><strong>Receiving Leads:</strong> Whenever a parent fills
+                                out the "Ready to Join Us" form on the main website, it instantly appears here.</li>
+                            <li><strong>Status Tracking:</strong> Click "Mark Contacted" once you call the lead. Click
+                                "Resolve" when they are enrolled or closed.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- Add Student Modal -->
+    <div id="addStudentModal" class="modal-overlay">
+        <div class="modal-box">
+            <div class="modal-header">
+                <h3>Add New Student</h3>
+                <button class="close-btn" onclick="closeModal('addStudentModal')"><i
+                        class="fa-solid fa-times"></i></button>
+            </div>
+            <form id="addStudentForm">
+                <div class="form-group">
+                    <label>Full Name</label>
+                    <input type="text" id="stuName" required>
+                </div>
+                <div class="form-group">
+                    <label>Class / Stream</label>
+                    <select id="stuClass" required>
+                        <option value="">Select Class</option>
+                        <option value="Class 1">Class 1</option>
+                        <option value="Class 2">Class 2</option>
+                        <option value="Class 3">Class 3</option>
+                        <option value="Class 4">Class 4</option>
+                        <option value="Class 5">Class 5</option>
+                        <option value="Class 6">Class 6</option>
+                        <option value="Class 7">Class 7</option>
+                        <option value="Class 8">Class 8</option>
+                        <option value="Class 9">Class 9</option>
+                        <option value="Class 10">Class 10</option>
+                        <option value="MPC">MPC</option>
+                        <option value="MEC">MEC</option>
+                        <option value="CEC">CEC</option>
+                        <option value="B.Tech">B.Tech</option>
+                        <option value="Degree">Degree</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label>Joining Date</label>
+                    <input type="date" id="stuDate" required>
+                </div>
+                <div class="form-group">
+                    <label>Monthly Fee Amount (₹)</label>
+                    <input type="number" id="stuFee" required min="0">
+                </div>
+                <button type="submit" class="btn-primary w-100">Save Student Data</button>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase.js"></script>
+    <script src="js/admin.js"></script>
+</body>
+
+</html>
